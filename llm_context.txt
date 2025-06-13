@@ -1,0 +1,157 @@
+
+############################  LLM_CONTEXT_DIRECTIVE  ############################
+## COMPREHENSIVE CODEBASE  – MERGED, AUTHORITATIVE SOURCE OF TRUTH
+##  Files        : 5
+##  Tokens (≈)   : 218
+##  Generated    : 2025-06-13T12:38:25Z
+###############################################################################
+
+You are reading the **one-true, merged code drop** for this project.  
+Assume nothing exists outside this file.
+━━━━━━━━━━━━━━━━ FILE DELIMITERS ━━━━━━━━━━━━━━━━  
+    <<< FILE: path/to/file.ext >>>    …    <<< END FILE >>>
+━━━━━━━━━━━━━━━━ FILE ORDER ━━━━━━━━━━━━━━━━  
+1. Entry points  
+2. Configuration / env  
+3. Core implementation (alphabetical)
+4. Tests & fixtures  
+───────────────────────── HARD RULES (NON-NEGOTIABLE) ─────────────────────────
+1. Wrapper integrity – Never delete, nest, or reorder the <<< FILE … >>> /
+    <<< END FILE >>> markers. Everything between one pair is that file.
+2. **Duplicate filenames** – If a path occurs multiple times, **KEEP ONLY** the
+    final occurrence; earlier versions are obsolete and must be ignored.  
+    • **Special case:** `llm_context.txt` is itself one of the wrapped files.
+    If it appears more than once, **use only the last instance**.
+3. **Source-bounded reasoning** – Do **not** hallucinate or invent code.  
+    If it is not inside the wrappers, it does not exist.
+4. **Quoting & citing** – When referring to code, always name the *exact* file
+    path (line numbers optional but helpful).
+5. **No structural drift** – Do **not** rename, split, or shuffle files unless
+    explicitly told. Preserve imports, comments, and formatting verbatim when
+    copying snippets.
+6. Scope of edits – Work exclusively on the most recent version of each file.
+7. Patch delivery
+    • For every edited file, return the entire updated file, wrapped as shown below.
+    • Snippets or diffs are not allowed.
+    • Explanations alone must not alter code blocks.
+    Language-specific wrappers
+    ─────────────
+    // <<< FILE: path/to/file.ext >>>    …    <<< END FILE >>> (JS, TS, Java, C#, C++, etc.)
+    ### <<< FILE: path/to/file.ext >>>    …    <<< END FILE >>>  (Python, etc.)
+    <!-- <<< FILE: path/to/file.ext >>>    …    <<< END FILE >>> --> (HTML, etc.)
+    /* <<< FILE: path/to/file.ext >>>    …    <<< END FILE >>> */ (CSS / SCSS, etc.)
+    -- <<< FILE: path/to/file.ext >>>    …    <<< END FILE >>> -- (SQL, etc.)
+    ─────────────
+8. Context preservation – If content is omitted for brevity, indicate it with:
+    ... [TRUNCATED: X lines] ...
+9. Always use Canvas for code blocks, and ensure that the code is formatted
+    correctly with proper syntax highlighting for the file type.
+
+──────────────────────────────── END OF RULES ────────────────────────────────
+
+
+### PROJECT STRUCTURE & ANALYSIS
+IDX │ FILE PATH                                                │ TYPE       │ LINES │ TOKENS │ PRIORITY
+────┼──────────────────────────────────────────────────────────┼────────────┼───────┼────────┼─────────
+  1 │ .swcrc                                                   │ unknown    │    26 │     80 │       0
+  2 │ package.json                                             │ unknown    │    25 │     76 │      40
+  3 │ tsconfig.json                                            │ unknown    │    15 │     40 │      10
+  4 │ src/main.ts                                              │ unknown    │     3 │      9 │     105
+  5 │ src/dir/hello.ts                                         │ unknown    │     4 │     13 │       5
+
+<<< FILE: .swcrc >>>
+# Metadata: type=text, lines=26, tokens≈80
+# ────────────────────────────────────────────────────────────
+{
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "tsx": true,
+            "preserveAllComments": false
+        },
+        "transform": null,
+        "target": "es2022",
+        "loose": false,
+        "externalHelpers": false,
+        // Requires v1.2.50 or upper and requires target to be es2016 or upper.
+        "keepClassNames": false
+    },
+    "isModule": true,
+    // Enable minification
+    // "minify": true,
+    "module": {
+        "type": "commonjs",
+        // These are defaults.
+        "strict": false,
+        "strictMode": true,
+        "lazy": false,
+        "noInterop": false
+    }
+}
+<<< END FILE >>>
+
+<<< FILE: package.json >>>
+# Metadata: type=text, lines=25, tokens≈76
+# ────────────────────────────────────────────────────────────
+{
+  "name": "swc_template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --ext ts --exec \"node -r @swc/register src/index.ts\"",
+    "build": "swc src -d dist --copy-files",
+    "type-check": "tsc --noEmit",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/cli": "^0.7.7",
+    "@swc/core": "^1.12.1",
+    "@swc/helpers": "^0.5.17",
+    "@swc/register": "^0.1.10",
+    "@types/node": "^24.0.1",
+    "playwright": "^1.53.0",
+    "typescript": "^5.8.3"
+  }
+}
+<<< END FILE >>>
+
+<<< FILE: tsconfig.json >>>
+# Metadata: type=text, lines=15, tokens≈40
+# ────────────────────────────────────────────────────────────
+{
+  "compilerOptions": {
+    "noEmit": true,               // SWC handles transpile
+    "isolatedModules": true,
+    "strict": true,
+    "target": "ES2022",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
+}
+<<< END FILE >>>
+
+<<< FILE: src/main.ts >>>
+# Metadata: type=text, lines=3, tokens≈9
+# ────────────────────────────────────────────────────────────
+import { hello } from "./dir/hello";
+
+hello();
+<<< END FILE >>>
+
+<<< FILE: src/dir/hello.ts >>>
+# Metadata: type=text, lines=4, tokens≈13
+# ────────────────────────────────────────────────────────────
+export const hello = () => {
+  console.log("Hello, world!");
+};
+<<< END FILE >>>
+
+<<< END OF MERGED CONTEXT >>>
+# Summary: 5 files processed, 0 truncated
