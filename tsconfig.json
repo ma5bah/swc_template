@@ -10,6 +10,8 @@
     "outDir": "dist",
     "rootDir": "src",
     "lib": ["ES2022"],
+    "allowJs": true,     // ← Add this
+    "checkJs": false,    // ← Add this (optional)
 
     /* interoperability ---------------------------------------------------- */
     "esModuleInterop": true,

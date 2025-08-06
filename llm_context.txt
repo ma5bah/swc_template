@@ -2,8 +2,8 @@
 ############################  LLM_CONTEXT_DIRECTIVE  ############################
 ## COMPREHENSIVE CODEBASE  – MERGED, AUTHORITATIVE SOURCE OF TRUTH
 ##  Files        : 5
-##  Tokens (≈)   : 218
-##  Generated    : 2025-06-13T12:38:25Z
+##  Tokens (≈)   : 407
+##  Generated    : 2025-08-06T12:02:27Z
 ###############################################################################
 
 You are reading the **one-true, merged code drop** for this project.  
@@ -53,94 +53,129 @@ Assume nothing exists outside this file.
 ### PROJECT STRUCTURE & ANALYSIS
 IDX │ FILE PATH                                                │ TYPE       │ LINES │ TOKENS │ PRIORITY
 ────┼──────────────────────────────────────────────────────────┼────────────┼───────┼────────┼─────────
-  1 │ .swcrc                                                   │ unknown    │    26 │     80 │       0
-  2 │ package.json                                             │ unknown    │    25 │     76 │      40
-  3 │ tsconfig.json                                            │ unknown    │    15 │     40 │      10
+  1 │ .swcrc                                                   │ unknown    │    30 │    118 │       0
+  2 │ package.json                                             │ unknown    │    31 │    113 │      40
+  3 │ tsconfig.json                                            │ unknown    │    40 │    154 │      10
   4 │ src/main.ts                                              │ unknown    │     3 │      9 │     105
   5 │ src/dir/hello.ts                                         │ unknown    │     4 │     13 │       5
 
 <<< FILE: .swcrc >>>
-# Metadata: type=text, lines=26, tokens≈80
+# Metadata: type=text, lines=30, tokens≈118
 # ────────────────────────────────────────────────────────────
 {
-    "jsc": {
-        "parser": {
-            "syntax": "typescript",
-            "tsx": true,
-            "preserveAllComments": false
-        },
-        "transform": null,
-        "target": "es2022",
-        "loose": false,
-        "externalHelpers": false,
-        // Requires v1.2.50 or upper and requires target to be es2016 or upper.
-        "keepClassNames": false
-    },
-    "isModule": true,
-    // Enable minification
-    // "minify": true,
-    "module": {
-        "type": "commonjs",
-        // These are defaults.
-        "strict": false,
-        "strictMode": true,
-        "lazy": false,
-        "noInterop": false
-    }
+  "$schema": "https://swc.rs/schema.json",
+
+  "jsc": {
+    "parser": { "syntax": "typescript", "tsx": true, "decorators": false },
+    "target": "es2022",
+    "loose": false,
+    "externalHelpers": true,                 // shared helpers = smaller output
+    "keepClassNames": false,
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
+  },
+
+//   "env": {                                   // polyfill only when used
+//     "targets": { "node": "18" },             // matches current LTS
+//     "mode": "usage",
+//     "coreJs": "3.36"
+//   },
+
+  "module": { "type": "commonjs", "strictMode": true, "lazy": false, "noInterop": false },
+
+  "sourceMaps": "inline",
+  "minify": false,                           // flip to true in a `.swcrc.prod`
+  "exclude": [
+    "\\.spec\\.[jt]s$",
+    "\\.test\\.[jt]s$",
+    "^dist/"
+  ]
 }
 <<< END FILE >>>
 
 <<< FILE: package.json >>>
-# Metadata: type=text, lines=25, tokens≈76
+# Metadata: type=text, lines=31, tokens≈113
 # ────────────────────────────────────────────────────────────
 {
   "name": "swc_template",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev": "nodemon --watch src --ext ts --exec \"node -r @swc/register src/index.ts\"",
-    "build": "swc src -d dist --copy-files",
-    "type-check": "tsc --noEmit",
-    "start": "node dist/index.js"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",        
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "dev":   "nodemon --watch src --ext ts --exec \"node -r @swc/register src/index.ts\"",
+    "build": "swc src -d dist --copy-files",
+    "build:prod": "swc src -d dist --copy-files --config-file .swcrc.prod",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/index.js",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\""
+  },
   "devDependencies": {
     "@swc/cli": "^0.7.7",
     "@swc/core": "^1.12.1",
-    "@swc/helpers": "^0.5.17",
-    "@swc/register": "^0.1.10",
-    "@types/node": "^24.0.1",
-    "playwright": "^1.53.0",
-    "typescript": "^5.8.3"
+    "@swc/helpers": "^0.5.3",
+    "@swc/register": "^0.1.9",
+    "typescript": "^5.5.0",
+    "nodemon": "^3.0.3",
+    "eslint": "^8.58.0",
+    "prettier": "^3.4.0"
   }
 }
 <<< END FILE >>>
 
 <<< FILE: tsconfig.json >>>
-# Metadata: type=text, lines=15, tokens≈40
+# Metadata: type=text, lines=40, tokens≈154
 # ────────────────────────────────────────────────────────────
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 18 + SWC",
+
   "compilerOptions": {
-    "noEmit": true,               // SWC handles transpile
-    "isolatedModules": true,
-    "strict": true,
+    /* language & emit ----------------------------------------------------- */
     "target": "ES2022",
-    "moduleResolution": "node",
+    "module": "NodeNext",            // keeps import/export in .ts for tooling
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "lib": ["ES2022"],
+    "allowJs": true,     // ← Add this
+    "checkJs": false,    // ← Add this (optional)
+
+    /* interoperability ---------------------------------------------------- */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    /* decorators (still disabled in .swcrc) ------------------------------- */
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+
+    /* strictness & speed -------------------------------------------------- */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,             // caching speeds up `tsc --noEmit`
+    "noEmit": true,                  // SWC handles JS emit
+
+    /* path alias mirrors .swcrc ------------------------------------------ */
     "baseUrl": ".",
     "paths": { "@/*": ["src/*"] }
   },
+
   "include": ["src/**/*.ts"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "**/*.spec.ts", "**/*.test.ts"]
 }
 <<< END FILE >>>
 
 <<< FILE: src/main.ts >>>
 # Metadata: type=text, lines=3, tokens≈9
 # ────────────────────────────────────────────────────────────
-import { hello } from "./dir/hello";
+import { hello } from "@/dir/hello.js";
 
 hello();
 <<< END FILE >>>
